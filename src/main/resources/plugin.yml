@@ -1,0 +1,15 @@
+name: LobbyPlugin
+version: '${version}'
+
+main: org.astral.lobbyPlugin.LobbyPlugin
+api-version: '26.1.2'
+load: POSTWORLD
+folia-supported: true
+commands:
+  lobby:
+    description: Main lobby command
+    usage: /lobby <reload|setspawn>
+
+permissions:
+  lobbyplugin.admin:
+    default: op

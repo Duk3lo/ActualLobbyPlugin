@@ -1,0 +1,33 @@
+spawn:
+  world: world
+  x: 0.5
+  y: 100.0
+  z: 0.5
+  yaw: 0.0
+  pitch: 0.0
+
+  bounds:
+    enabled: true
+    x:
+      enabled: false
+      min: -50.0
+      max: 50.0
+    y:
+      enabled: true
+      min: 0.0
+      max: 255.0
+    z:
+      enabled: false
+      min: -50.0
+      max: 50.0
+
+protection:
+  enabled: true
+  admin-permission: lobbyplugin.admin
+  bypass-op: false
+  bypass-creative: false
+  block-break: true
+  block-place: true
+  interact: true
+  trample: true
+  damage: true
