@@ -1,5 +1,6 @@
 package org.astral.lobbyPlugin.events.event;
 
+import io.papermc.paper.event.player.AsyncPlayerSpawnLocationEvent;
 import org.astral.lobbyPlugin.LobbyPlugin;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -12,14 +13,19 @@ public final class JoinEvent implements Listener {
 
     private final LobbyPlugin plugin = LobbyPlugin.getInstance();
 
+    @SuppressWarnings("UnstableApiUsage")
+    @EventHandler
+    public void onPlayerSpawnLocation(@NonNull AsyncPlayerSpawnLocationEvent event) {
+        Location location = plugin.getConfigManager().getSpawnLocation();
+
+        if (location != null) {
+            event.setSpawnLocation(location);
+        }
+    }
+
     @EventHandler
     public void onPlayerJoin(@NonNull PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        Location location = plugin.getConfigManager().getSpawnLocation();
-        if (location != null) {
-            player.teleportAsync(location);
-        }
         player.setCollidable(false);
     }
-
 }
