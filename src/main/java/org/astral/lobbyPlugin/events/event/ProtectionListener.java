@@ -45,7 +45,6 @@ public final class ProtectionListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onFoodChange(@NonNull FoodLevelChangeEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
-        if (canBypass(player)) return;
         event.setCancelled(true);
         player.setFoodLevel(20);
     }
