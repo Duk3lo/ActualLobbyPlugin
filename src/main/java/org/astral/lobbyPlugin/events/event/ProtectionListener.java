@@ -13,6 +13,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.jspecify.annotations.NonNull;
@@ -39,6 +40,14 @@ public final class ProtectionListener implements Listener {
     public void onBlockPlace(@NonNull BlockPlaceEvent event) {
         if (canBypass(event.getPlayer())) return;
         if (plugin.getConfigManager().isBlockPlaceEnabled()) event.setCancelled(true);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onFoodChange(@NonNull FoodLevelChangeEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        if (canBypass(player)) return;
+        event.setCancelled(true);
+        player.setFoodLevel(20);
     }
 
     @EventHandler(ignoreCancelled = true)
