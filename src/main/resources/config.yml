@@ -6,20 +6,20 @@ spawn:
   yaw: 0.0
   pitch: 0.0
 
-  bounds:
+bounds:
+  enabled: true
+  x:
+    enabled: false
+    min: -50.0
+    max: 50.0
+  y:
     enabled: true
-    x:
-      enabled: false
-      min: -50.0
-      max: 50.0
-    y:
-      enabled: true
-      min: 0.0
-      max: 255.0
-    z:
-      enabled: false
-      min: -50.0
-      max: 50.0
+    min: 0.0
+    max: 255.0
+  z:
+    enabled: false
+    min: -50.0
+    max: 50.0
 
 protection:
   enabled: true
@@ -31,3 +31,4 @@ protection:
   interact: true
   trample: true
   damage: true
+  item-frames: true

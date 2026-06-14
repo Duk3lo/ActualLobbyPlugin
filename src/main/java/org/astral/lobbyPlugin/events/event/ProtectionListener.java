@@ -3,8 +3,10 @@ package org.astral.lobbyPlugin.events.event;
 import org.astral.lobbyPlugin.LobbyPlugin;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -14,6 +16,8 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.jspecify.annotations.NonNull;
@@ -28,6 +32,12 @@ public final class ProtectionListener implements Listener {
         if (config.isBypassCreative() && player.getGameMode() == GameMode.CREATIVE) return true;
         if (player.isOp()) return config.isBypassOp();
         return player.hasPermission(config.getAdminPermission());
+    }
+
+    private Player getPlayerFromEntity(Entity entity) {
+        if (entity instanceof Player player) return player;
+        if (entity instanceof Projectile projectile && projectile.getShooter() instanceof Player player) return player;
+        return null;
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -74,9 +84,44 @@ public final class ProtectionListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onDamageByEntity(@NonNull EntityDamageByEntityEvent event) {
-        if (!(event.getEntity() instanceof Player player)) return;
-        if (canBypass(player)) return;
-        if (plugin.getConfigManager().isDamageEnabled()) event.setCancelled(true);
+        if (event.getEntity() instanceof Player player) {
+            if (canBypass(player)) return;
+            if (plugin.getConfigManager().isDamageEnabled()) event.setCancelled(true);
+            return;
+        }
+        if (plugin.getConfigManager().isItemFramesEnabled()) {
+            EntityType type = event.getEntity().getType();
+            if (type == EntityType.ITEM_FRAME || type == EntityType.GLOW_ITEM_FRAME) {
+                Player damager = getPlayerFromEntity(event.getDamager());
+                if (damager != null && canBypass(damager)) return;
+
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onHangingBreak(@NonNull HangingBreakByEntityEvent event) {
+        if (!plugin.getConfigManager().isItemFramesEnabled()) return;
+
+        EntityType type = event.getEntity().getType();
+        if (type == EntityType.ITEM_FRAME || type == EntityType.GLOW_ITEM_FRAME) {
+            Player remover = getPlayerFromEntity(event.getRemover());
+            if (remover != null && canBypass(remover)) return;
+
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onInteractEntity(@NonNull PlayerInteractEntityEvent event) {
+        if (!plugin.getConfigManager().isItemFramesEnabled()) return;
+
+        EntityType type = event.getRightClicked().getType();
+        if (type == EntityType.ITEM_FRAME || type == EntityType.GLOW_ITEM_FRAME) {
+            if (canBypass(event.getPlayer())) return;
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler(ignoreCancelled = true)

@@ -19,6 +19,7 @@ public final class LobbyPluginConfig {
     private boolean interact;
     private boolean trample;
     private boolean damage;
+    private boolean itemFrames;
 
     private boolean boundsEnabled;
     private boolean xEnabled, yEnabled, zEnabled;
@@ -52,6 +53,7 @@ public final class LobbyPluginConfig {
         interact = config.getBoolean("protection.interact", true);
         trample = config.getBoolean("protection.trample", true);
         damage = config.getBoolean("protection.damage", true);
+        itemFrames = config.getBoolean("protection.item-frames", true);
 
         boundsEnabled = config.getBoolean("spawn.bounds.enabled", true);
 
@@ -108,4 +110,6 @@ public final class LobbyPluginConfig {
     public boolean isDamageEnabled() { return damage; }
     public boolean isBoundsEnabled() { return boundsEnabled; }
     public Location getSpawnLocation() { return spawnLocation; }
+    public boolean isItemFramesEnabled() { return itemFrames; }
+
 }
