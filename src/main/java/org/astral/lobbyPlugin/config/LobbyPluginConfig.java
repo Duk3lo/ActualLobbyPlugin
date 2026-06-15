@@ -6,10 +6,15 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class LobbyPluginConfig {
 
     private final LobbyPlugin plugin;
+
     private Location spawnLocation;
+
     private boolean protectionEnabled;
     private String adminPermission;
     private boolean bypassOp;
@@ -25,6 +30,11 @@ public final class LobbyPluginConfig {
     private boolean xEnabled, yEnabled, zEnabled;
     private double minX, maxX, minY, maxY, minZ, maxZ;
 
+    private boolean joinActionsEnabled;
+    private boolean joinClearInventory;
+    private final List<String> joinConsoleCommands = new ArrayList<>();
+    private final List<String> joinPlayerCommands = new ArrayList<>();
+
     public LobbyPluginConfig(LobbyPlugin plugin) {
         this.plugin = plugin;
     }
@@ -32,16 +42,24 @@ public final class LobbyPluginConfig {
     public void load() {
         plugin.saveDefaultConfig();
         plugin.reloadConfig();
+
         FileConfiguration config = plugin.getConfig();
 
         String worldName = config.getString("spawn.world", "world");
         World world = Bukkit.getWorld(worldName);
-        if (world == null && !Bukkit.getWorlds().isEmpty()) world = Bukkit.getWorlds().getFirst();
+        if (world == null && !Bukkit.getWorlds().isEmpty()) {
+            world = Bukkit.getWorlds().getFirst();
+        }
 
         if (world != null) {
-            spawnLocation = new Location(world,
-                    config.getDouble("spawn.x"), config.getDouble("spawn.y"), config.getDouble("spawn.z"),
-                    (float) config.getDouble("spawn.yaw"), (float) config.getDouble("spawn.pitch"));
+            spawnLocation = new Location(
+                    world,
+                    config.getDouble("spawn.x"),
+                    config.getDouble("spawn.y"),
+                    config.getDouble("spawn.z"),
+                    (float) config.getDouble("spawn.yaw"),
+                    (float) config.getDouble("spawn.pitch")
+            );
         }
 
         protectionEnabled = config.getBoolean("protection.enabled", true);
@@ -56,7 +74,6 @@ public final class LobbyPluginConfig {
         itemFrames = config.getBoolean("protection.item-frames", true);
 
         boundsEnabled = config.getBoolean("spawn.bounds.enabled", true);
-
         xEnabled = config.getBoolean("spawn.bounds.x.enabled", false);
         minX = config.getDouble("spawn.bounds.x.min", -50.0);
         maxX = config.getDouble("spawn.bounds.x.max", 50.0);
@@ -68,6 +85,15 @@ public final class LobbyPluginConfig {
         zEnabled = config.getBoolean("spawn.bounds.z.enabled", false);
         minZ = config.getDouble("spawn.bounds.z.min", -50.0);
         maxZ = config.getDouble("spawn.bounds.z.max", 50.0);
+
+        joinActionsEnabled = config.getBoolean("join.enabled", true);
+        joinClearInventory = config.getBoolean("join.clear-inventory", true);
+
+        joinConsoleCommands.clear();
+        joinConsoleCommands.addAll(config.getStringList("join.console-commands"));
+
+        joinPlayerCommands.clear();
+        joinPlayerCommands.addAll(config.getStringList("join.player-commands"));
     }
 
     public boolean isInsideBounds(Location loc) {
@@ -77,9 +103,11 @@ public final class LobbyPluginConfig {
         if (xEnabled) {
             if (loc.getX() < minX || loc.getX() > maxX) return false;
         }
+
         if (yEnabled) {
             if (loc.getY() < minY || loc.getY() > maxY) return false;
         }
+
         if (zEnabled) {
             return !(loc.getZ() < minZ) && !(loc.getZ() > maxZ);
         }
@@ -89,6 +117,7 @@ public final class LobbyPluginConfig {
 
     public void saveSpawn(Location location) {
         if (location == null || location.getWorld() == null) return;
+
         plugin.getConfig().set("spawn.world", location.getWorld().getName());
         plugin.getConfig().set("spawn.x", location.getX());
         plugin.getConfig().set("spawn.y", location.getY());
@@ -99,17 +128,67 @@ public final class LobbyPluginConfig {
         spawnLocation = location.clone();
     }
 
-    public boolean isProtectionEnabled() { return protectionEnabled; }
-    public String getAdminPermission() { return adminPermission; }
-    public boolean isBypassOp() { return bypassOp; }
-    public boolean isBypassCreative() { return bypassCreative; }
-    public boolean isBlockBreakEnabled() { return blockBreak; }
-    public boolean isBlockPlaceEnabled() { return blockPlace; }
-    public boolean isInteractEnabled() { return interact; }
-    public boolean isTrampleEnabled() { return trample; }
-    public boolean isDamageEnabled() { return damage; }
-    public boolean isBoundsEnabled() { return boundsEnabled; }
-    public Location getSpawnLocation() { return spawnLocation; }
-    public boolean isItemFramesEnabled() { return itemFrames; }
+    public boolean isProtectionEnabled() {
+        return protectionEnabled;
+    }
 
+    public String getAdminPermission() {
+        return adminPermission;
+    }
+
+    public boolean isBypassOp() {
+        return bypassOp;
+    }
+
+    public boolean isBypassCreative() {
+        return bypassCreative;
+    }
+
+    public boolean isBlockBreakEnabled() {
+        return blockBreak;
+    }
+
+    public boolean isBlockPlaceEnabled() {
+        return blockPlace;
+    }
+
+    public boolean isInteractEnabled() {
+        return interact;
+    }
+
+    public boolean isTrampleEnabled() {
+        return trample;
+    }
+
+    public boolean isDamageEnabled() {
+        return damage;
+    }
+
+    public boolean isItemFramesEnabled() {
+        return itemFrames;
+    }
+
+    public boolean isBoundsEnabled() {
+        return boundsEnabled;
+    }
+
+    public Location getSpawnLocation() {
+        return spawnLocation;
+    }
+
+    public boolean isJoinActionsEnabled() {
+        return joinActionsEnabled;
+    }
+
+    public boolean isJoinClearInventory() {
+        return joinClearInventory;
+    }
+
+    public List<String> getJoinConsoleCommands() {
+        return List.copyOf(joinConsoleCommands);
+    }
+
+    public List<String> getJoinPlayerCommands() {
+        return List.copyOf(joinPlayerCommands);
+    }
 }

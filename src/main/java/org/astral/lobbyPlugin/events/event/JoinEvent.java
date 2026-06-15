@@ -2,6 +2,8 @@ package org.astral.lobbyPlugin.events.event;
 
 import io.papermc.paper.event.player.AsyncPlayerSpawnLocationEvent;
 import org.astral.lobbyPlugin.LobbyPlugin;
+import org.astral.lobbyPlugin.config.LobbyPluginConfig;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,5 +29,28 @@ public final class JoinEvent implements Listener {
     public void onPlayerJoin(@NonNull PlayerJoinEvent event) {
         Player player = event.getPlayer();
         player.setCollidable(false);
+
+        LobbyPluginConfig config = plugin.getConfigManager();
+
+        if (!config.isJoinActionsEnabled()) {
+            return;
+        }
+
+        if (config.isJoinClearInventory()) {
+            player.getInventory().clear();
+        }
+
+        for (String command : config.getJoinConsoleCommands()) {
+            Bukkit.dispatchCommand(
+                    Bukkit.getConsoleSender(),
+                    command.replace("{player}", player.getName())
+            );
+        }
+
+        for (String command : config.getJoinPlayerCommands()) {
+            player.performCommand(
+                    command.replace("{player}", player.getName())
+            );
+        }
     }
 }
