@@ -28,29 +28,34 @@ public final class JoinEvent implements Listener {
     @EventHandler
     public void onPlayerJoin(@NonNull PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        player.setCollidable(false);
-
         LobbyPluginConfig config = plugin.getConfigManager();
 
-        if (!config.isJoinActionsEnabled()) {
-            return;
-        }
+        player.getScheduler().run(plugin, _ -> {
+            player.setCollidable(false);
 
-        if (config.isJoinClearInventory()) {
-            player.getInventory().clear();
-        }
+            if (!config.isJoinActionsEnabled()) {
+                return;
+            }
 
-        for (String command : config.getJoinConsoleCommands()) {
-            Bukkit.dispatchCommand(
-                    Bukkit.getConsoleSender(),
-                    command.replace("{player}", player.getName())
-            );
-        }
+            if (config.isJoinClearInventory()) {
+                player.getInventory().clear();
+            }
 
-        for (String command : config.getJoinPlayerCommands()) {
-            player.performCommand(
-                    command.replace("{player}", player.getName())
-            );
-        }
+            for (String command : config.getJoinPlayerCommands()) {
+                String parsed = command.replace("{player}", player.getName());
+                player.performCommand(parsed);
+            }
+        }, null);
+
+        plugin.getServer().getGlobalRegionScheduler().execute(plugin, () -> {
+            if (!config.isJoinActionsEnabled()) {
+                return;
+            }
+
+            for (String command : config.getJoinConsoleCommands()) {
+                String parsed = command.replace("{player}", player.getName());
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), parsed);
+            }
+        });
     }
 }
