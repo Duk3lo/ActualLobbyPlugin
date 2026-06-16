@@ -24,7 +24,7 @@ bounds:
 protection:
   enabled: true
   admin-permission: lobbyplugin.admin
-  bypass-op: false
+  bypass-op: true
   bypass-creative: false
   block-break: true
   block-place: true

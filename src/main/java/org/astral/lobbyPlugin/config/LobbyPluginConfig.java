@@ -65,18 +65,18 @@ public final class LobbyPluginConfig {
         damage = config.getBoolean("protection.damage", true);
         itemFrames = config.getBoolean("protection.item-frames", true);
 
-        boundsEnabled = config.getBoolean("spawn.bounds.enabled", true);
-        xEnabled = config.getBoolean("spawn.bounds.x.enabled", false);
-        minX = config.getDouble("spawn.bounds.x.min", -50.0);
-        maxX = config.getDouble("spawn.bounds.x.max", 50.0);
+        boundsEnabled = config.getBoolean("bounds.enabled", true);
+        xEnabled = config.getBoolean("bounds.x.enabled", false);
+        minX = config.getDouble("bounds.x.min", -50.0);
+        maxX = config.getDouble("bounds.x.max", 50.0);
 
-        yEnabled = config.getBoolean("spawn.bounds.y.enabled", false);
-        minY = config.getDouble("spawn.bounds.y.min", 0.0);
-        maxY = config.getDouble("spawn.bounds.y.max", 255.0);
+        yEnabled = config.getBoolean("bounds.y.enabled", false);
+        minY = config.getDouble("bounds.y.min", 0.0);
+        maxY = config.getDouble("bounds.y.max", 255.0);
 
-        zEnabled = config.getBoolean("spawn.bounds.z.enabled", false);
-        minZ = config.getDouble("spawn.bounds.z.min", -50.0);
-        maxZ = config.getDouble("spawn.bounds.z.max", 50.0);
+        zEnabled = config.getBoolean("bounds.z.enabled", false);
+        minZ = config.getDouble("bounds.z.min", -50.0);
+        maxZ = config.getDouble("bounds.z.max", 50.0);
     }
 
     public boolean isInsideBounds(Location loc) {
