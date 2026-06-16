@@ -32,16 +32,3 @@ protection:
   trample: true
   damage: true
   item-frames: true
-
-join:
-  enabled: true
-  clear-inventory: true
-
-  console-commands:
-    - "minecraft:clear {player}"
-    - "spawnpoint {player}"
-    - "give {player} minecraft:bread 8"
-
-  player-commands:
-    - "spawn"
-    - "menu"

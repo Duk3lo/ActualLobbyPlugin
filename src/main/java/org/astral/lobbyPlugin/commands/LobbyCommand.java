@@ -1,9 +1,7 @@
 package org.astral.lobbyPlugin.commands;
 
 import org.astral.lobbyPlugin.LobbyPlugin;
-import org.astral.lobbyPlugin.commands.subcommands.ReloadCmd;
-import org.astral.lobbyPlugin.commands.subcommands.SetSpawnCmd;
-import org.astral.lobbyPlugin.commands.subcommands.SubCommand;
+import org.astral.lobbyPlugin.commands.subcommands.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -21,6 +19,8 @@ public final class LobbyCommand implements CommandExecutor, TabCompleter {
     public LobbyCommand(LobbyPlugin plugin) {
         register(new ReloadCmd(plugin));
         register(new SetSpawnCmd(plugin));
+        register(new SpawnCmd(plugin));
+        register(new PlayersCmd(plugin));
     }
 
     private void register(SubCommand cmd) {
@@ -35,7 +35,7 @@ public final class LobbyCommand implements CommandExecutor, TabCompleter {
             @NonNull String @NonNull [] args
     ) {
         if (args.length == 0) {
-            sender.sendMessage("§eUsa: §f/lobby <reload|setspawn>");
+            sender.sendMessage("§eUsa: §f/lobby <reload|setspawn|spawn|players>");
             return true;
         }
 

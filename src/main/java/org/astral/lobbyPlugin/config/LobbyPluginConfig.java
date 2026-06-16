@@ -6,9 +6,6 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public final class LobbyPluginConfig {
 
     private final LobbyPlugin plugin;
@@ -29,11 +26,6 @@ public final class LobbyPluginConfig {
     private boolean boundsEnabled;
     private boolean xEnabled, yEnabled, zEnabled;
     private double minX, maxX, minY, maxY, minZ, maxZ;
-
-    private boolean joinActionsEnabled;
-    private boolean joinClearInventory;
-    private final List<String> joinConsoleCommands = new ArrayList<>();
-    private final List<String> joinPlayerCommands = new ArrayList<>();
 
     public LobbyPluginConfig(LobbyPlugin plugin) {
         this.plugin = plugin;
@@ -85,15 +77,6 @@ public final class LobbyPluginConfig {
         zEnabled = config.getBoolean("spawn.bounds.z.enabled", false);
         minZ = config.getDouble("spawn.bounds.z.min", -50.0);
         maxZ = config.getDouble("spawn.bounds.z.max", 50.0);
-
-        joinActionsEnabled = config.getBoolean("join.enabled", true);
-        joinClearInventory = config.getBoolean("join.clear-inventory", true);
-
-        joinConsoleCommands.clear();
-        joinConsoleCommands.addAll(config.getStringList("join.console-commands"));
-
-        joinPlayerCommands.clear();
-        joinPlayerCommands.addAll(config.getStringList("join.player-commands"));
     }
 
     public boolean isInsideBounds(Location loc) {
@@ -174,21 +157,5 @@ public final class LobbyPluginConfig {
 
     public Location getSpawnLocation() {
         return spawnLocation;
-    }
-
-    public boolean isJoinActionsEnabled() {
-        return joinActionsEnabled;
-    }
-
-    public boolean isJoinClearInventory() {
-        return joinClearInventory;
-    }
-
-    public List<String> getJoinConsoleCommands() {
-        return List.copyOf(joinConsoleCommands);
-    }
-
-    public List<String> getJoinPlayerCommands() {
-        return List.copyOf(joinPlayerCommands);
     }
 }
