@@ -31,7 +31,7 @@ public final class ProtectionListener implements Listener {
         if (!config.isProtectionEnabled()) return true;
         if (config.isBypassCreative() && player.getGameMode() == GameMode.CREATIVE) return true;
         if (player.isOp()) return config.isBypassOp();
-        return player.hasPermission(config.getAdminPermission());
+        return false;
     }
 
     private Player getPlayerFromEntity(Entity entity) {

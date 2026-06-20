@@ -13,7 +13,6 @@ public final class LobbyPluginConfig {
     private Location spawnLocation;
 
     private boolean protectionEnabled;
-    private String adminPermission;
     private boolean bypassOp;
     private boolean bypassCreative;
     private boolean blockBreak;
@@ -55,7 +54,6 @@ public final class LobbyPluginConfig {
         }
 
         protectionEnabled = config.getBoolean("protection.enabled", true);
-        adminPermission = config.getString("protection.admin-permission", "lobbyplugin.admin");
         bypassOp = config.getBoolean("protection.bypass-op", false);
         bypassCreative = config.getBoolean("protection.bypass-creative", false);
         blockBreak = config.getBoolean("protection.block-break", true);
@@ -113,10 +111,6 @@ public final class LobbyPluginConfig {
 
     public boolean isProtectionEnabled() {
         return protectionEnabled;
-    }
-
-    public String getAdminPermission() {
-        return adminPermission;
     }
 
     public boolean isBypassOp() {
