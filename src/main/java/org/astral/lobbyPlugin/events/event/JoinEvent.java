@@ -2,7 +2,6 @@ package org.astral.lobbyPlugin.events.event;
 
 import io.papermc.paper.event.player.AsyncPlayerSpawnLocationEvent;
 import org.astral.lobbyPlugin.LobbyPlugin;
-import org.astral.lobbyPlugin.config.LobbyPluginConfig;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,9 +27,6 @@ public final class JoinEvent implements Listener {
     public void onPlayerJoin(@NonNull PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        player.getScheduler().run(plugin, _ -> {
-            player.setCollidable(false);
-
-        }, null);
+        player.getScheduler().run(plugin, _ -> player.setCollidable(false), null);
     }
 }
